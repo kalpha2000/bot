@@ -1,0 +1,32 @@
+<launch>
+  <arg name="gui" default="true"/>
+  <arg name="model" default="myrobot"/>
+  <arg name="x_pos" default="-2.0"/>
+  <arg name="y_pos" default="-0.5"/>
+  <arg name="z_pos" default="0.0"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find mybot)/worlds/turtlebot_playground.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+ <param name="robot_description" command="$(find xacro)/xacro $(find mybot)/mybot_description/urdf/mybot.xacro" /> 
+
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  
+        args="-x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) 
+        -urdf -model $(arg model) -param robot_description" />
+
+  <!-- Rviz launch-->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mybot)/rviz_config/gmapping_config.rviz"/>
+
+  <!-- joint Controller launch -->
+  <include file="$(find mybot)/control/launch/mybot_control.launch"/>
+
+  <!-- Robot state publisher-->
+  <include file="$(find mybot)/launch/transformation.launch"/>
+
+</launch>

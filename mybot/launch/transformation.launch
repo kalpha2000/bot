@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- <param name="robot_description" command="$(find xacro)/xacro.py '$(find mybot)/mybot_description/urdf/mybot.xacro'"/> -->
+
+  <!-- send joint transform -->
+  <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="False"/>
+    <remap from="/joint_states" to="/mybot/joint_states"/>
+  </node> -->
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+	respawn="false" output="screen">
+    <param name="robot_description" command="$(find xacro)/xacro '$(find mybot)/mybot_description/urdf/mybot.xacro'" />
+    <remap from="/joint_states" to="/mybot/joint_states"/>
+  </node> 
+
+
+</launch>
